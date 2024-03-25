@@ -25,6 +25,8 @@ class Profile extends Model
 
     /**
      * Get the administrator that owns the profile.
+     *
+     * @return BelongsTo<Administrator, Profile>
      */
     public function administrator(): BelongsTo
     {
