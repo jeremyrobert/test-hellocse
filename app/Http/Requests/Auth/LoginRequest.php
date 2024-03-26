@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @OA\Schema(
+ *     schema="LoginRequest",
+ *     title="Login Request",
+ *     description="Request structure for administrator login",
+ *     required={"email", "password"},
+ *     @OA\Property(
+ *         property="email",
+ *         type="string",
+ *         format="email",
+ *         example="user@example.com",
+ *         description="The email address of the administrator"
+ *     ),
+ *     @OA\Property(
+ *         property="password",
+ *         type="string",
+ *         format="password",
+ *         example="password",
+ *         description="The password for the administrator"
+ *     )
+ * )
+ */
 class LoginRequest extends FormRequest
 {
     /**
