@@ -2,19 +2,27 @@
 
 namespace App\Services\Auth;
 
+use App\Enums\TokenAbility;
 use App\Models\Administrator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
     /**
-     * Create an auth token for the given administrator.
+     * Create auth tokens for the given administrator.
+     *
+     * @return array<string, string>
      */
-    public function createAuthToken(Administrator $administrator): string
+    public function createAuthTokens(Administrator $administrator): array
     {
-        $administrator->tokens()->where('name', 'auth_token')->delete();
+        $accessToken = $administrator->createToken('access_token', [TokenAbility::ACCESS_API], Carbon::now()->addMinutes(config('sanctum.access_token_expiration')));
+        $refreshToken = $administrator->createToken('refresh_token', [TokenAbility::REFRESH_TOKEN], Carbon::now()->addMinutes(config('sanctum.refresh_token_expiration')));
 
-        return $administrator->createToken('auth_token')->plainTextToken;
+        return [
+            'access_token' => $accessToken->plainTextToken,
+            'refresh_token' => $refreshToken->plainTextToken,
+        ];
     }
 
     /**

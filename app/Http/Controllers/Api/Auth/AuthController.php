@@ -25,12 +25,9 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $this->authService->createAuthToken($administrator);
+        $tokens = $this->authService->createAuthTokens($administrator);
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        return response()->json($tokens);
     }
 
     /**
@@ -43,7 +40,7 @@ class AuthController extends Controller
         $administrator = Auth::user();
 
         if ($administrator) {
-            $token = $this->authService->createAuthToken($administrator);
+            $token = $this->authService->createAuthTokens($administrator);
 
             return response()->json([
                 'access_token' => $token,
