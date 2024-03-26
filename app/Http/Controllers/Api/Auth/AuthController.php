@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function __construct(private TokenService $tokenService) {}
 
     /**
-     * Register a new administrator and return an access token.
+     * Register a new administrator and return an access token and a refresh token.
      */
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -31,7 +31,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Log in an administrator and return an access token.
+     * Log in an administrator and return an access token and a refresh token.
      */
     public function login(LoginRequest $request): JsonResponse
     {
@@ -40,12 +40,25 @@ class AuthController extends Controller
         $administrator = Auth::user();
 
         if ($administrator) {
-            $token = $this->tokenService->createToken($administrator);
+            $tokens = $this->tokenService->createToken($administrator);
 
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
+            return response()->json($tokens);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    /**
+     * Refresh the access token.
+     */
+    public function refreshToken(): JsonResponse
+    {
+        $administrator = Auth::user();
+
+        if ($administrator) {
+            $token = $this->tokenService->refreshToken($administrator);
+
+            return response()->json($token);
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
