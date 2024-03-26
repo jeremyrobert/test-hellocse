@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        api: __DIR__.'/../routes/api/v1.php',
-        apiPrefix: 'api/v1',
+        api: __DIR__.'/../routes/api/api.php',
+        apiPrefix: 'api',
         then: function () {
+            Route::prefix('api/v1')->group(function () {
+                require __DIR__.'/../routes/api/v1.php';
+            });
             Route::prefix('api/v2')->group(function () {
                 require __DIR__.'/../routes/api/v2.php';
             });

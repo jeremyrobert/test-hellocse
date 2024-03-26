@@ -7,5 +7,3 @@ Route::get('/', function () {
         'message' => 'Nothing to see here. Move along.',
     ]);
 });
-
-include __DIR__.'/auth.php';
