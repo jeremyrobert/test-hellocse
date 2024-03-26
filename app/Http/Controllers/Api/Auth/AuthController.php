@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\Administrator;
-use App\Services\Auth\AuthService;
+use App\Services\Auth\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $authService) {}
+    public function __construct(private TokenService $tokenService) {}
 
     /**
      * Register a new administrator and return an access token.
@@ -25,7 +25,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $tokens = $this->authService->createAuthTokens($administrator);
+        $tokens = $this->tokenService->createToken($administrator);
 
         return response()->json($tokens);
     }
@@ -40,7 +40,7 @@ class AuthController extends Controller
         $administrator = Auth::user();
 
         if ($administrator) {
-            $token = $this->authService->createAuthTokens($administrator);
+            $token = $this->tokenService->createToken($administrator);
 
             return response()->json([
                 'access_token' => $token,
@@ -56,6 +56,6 @@ class AuthController extends Controller
      */
     public function logout(): void
     {
-        $this->authService->revokeAuthToken();
+        $this->tokenService->revokeToken();
     }
 }
