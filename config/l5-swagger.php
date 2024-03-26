@@ -1,18 +1,20 @@
 <?php
 
 return [
-    'default' => 'default',
+    'default' => 'v1',
     'documentations' => [
-        'default' => [
+        'v1' => [
             'api' => [
-                'title' => 'Test Technique - API Documentation',
+                'title' => 'Test Technique - API Documentation v1',
             ],
 
             'routes' => [
                 /*
                  * Route for accessing api documentation interface
                 */
-                'api' => 'api/documentation',
+                'api' => 'api/documentation/v1',
+                'docs' => 'api/v1',
+                'oauth2_callback' => 'api/v1/oauth2-callback',
             ],
             'paths' => [
                 /*
@@ -23,12 +25,12 @@ return [
                 /*
                  * File name of the generated json documentation file
                 */
-                'docs_json' => 'api-docs.json',
+                'docs_json' => 'api-docs-v1.json',
 
                 /*
                  * File name of the generated YAML documentation file
                 */
-                'docs_yaml' => 'api-docs.yaml',
+                'docs_yaml' => 'api-docs-v1.yaml',
 
                 /*
                 * Set this to `json` or `yaml` to determine which documentation file to use in UI
@@ -39,7 +41,54 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                 */
                 'annotations' => [
-                    base_path('app'),
+                    base_path('app').'/Http/Controllers/Api/Auth',
+                    base_path('app').'/Http/Controllers/Api/V1',
+                    base_path('app').'/Http/Requests',
+                ],
+
+            ],
+        ],
+        'v2' => [
+            'api' => [
+                'title' => 'Test Technique - API Documentation v2',
+            ],
+
+            'routes' => [
+                /*
+                 * Route for accessing api documentation interface
+                */
+                'api' => 'api/documentation/v2',
+                'docs' => 'api/v2',
+                'oauth2_callback' => 'api/v2/oauth2-callback',
+            ],
+            'paths' => [
+                /*
+                 * Edit to include full URL in ui for assets
+                */
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                /*
+                 * File name of the generated json documentation file
+                */
+                'docs_json' => 'api-docs-v2.json',
+
+                /*
+                 * File name of the generated YAML documentation file
+                */
+                'docs_yaml' => 'api-docs-v2.yaml',
+
+                /*
+                * Set this to `json` or `yaml` to determine which documentation file to use in UI
+                */
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                /*
+                 * Absolute paths to directory containing the swagger annotations are stored.
+                */
+                'annotations' => [
+                    base_path('app').'/Http/Controllers/Api/Auth',
+                    base_path('app').'/Http/Controllers/Api/V2',
+                    base_path('app').'/Http/Requests',
                 ],
 
             ],
@@ -61,7 +110,7 @@ return [
              * Middleware allows to prevent unexpected access to API documentation
             */
             'middleware' => [
-                'api' => [],
+                'api' => ['web'],
                 'asset' => [],
                 'docs' => [],
                 'oauth2_callback' => [],
@@ -191,13 +240,13 @@ return [
                         ],
                     ],
                 ],
+                */
                 'sanctum' => [ // Unique name of security
                     'type' => 'apiKey', // Valid values are "basic", "apiKey" or "oauth2".
                     'description' => 'Enter token in format (Bearer <token>)',
                     'name' => 'Authorization', // The name of the header or query parameter to be used.
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],
-                */
             ],
             'security' => [
                 /*
