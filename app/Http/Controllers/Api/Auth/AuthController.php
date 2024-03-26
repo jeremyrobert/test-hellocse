@@ -63,6 +63,7 @@ class AuthController extends Controller
      *
      *     @OA\Response(response=200, description="Successful login"),
      *     @OA\Response(response=422, description="Unprocessable Content"),
+     *     @OA\Response(response=401, description="Unauthorized"),
      * )
      */
     public function login(LoginRequest $request): JsonResponse
@@ -93,6 +94,7 @@ class AuthController extends Controller
      *
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=422, description="Unprocessable Content"),
+     *     @OA\Response(response=401, description="Unauthorized"),
      * )
      */
     public function refreshToken(): JsonResponse
