@@ -47,7 +47,9 @@ return [
     |
     */
 
-    'expiration' => 1440,
+    'expiration' => null,
+    'access_token_expiration' => 60, // 1 hour
+    'refresh_token_expiration' => 10080, // 7 days
 
     /*
     |--------------------------------------------------------------------------
