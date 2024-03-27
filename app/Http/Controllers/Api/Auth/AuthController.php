@@ -31,7 +31,10 @@ class AuthController extends Controller
      *
      *     @OA\RequestBody(
      *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/RegisterRequest")
+     *          @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(ref="#/components/schemas/RegisterRequest")
+     *          )
      *     ),
      *
      *     @OA\Response(response=201, description="Successful registration"),
@@ -59,7 +62,10 @@ class AuthController extends Controller
      *
      *     @OA\RequestBody(
      *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *          @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(ref="#/components/schemas/LoginRequest")
+     *          )
      *     ),
      *
      *     @OA\Response(response=200, description="Successful login"),
@@ -96,7 +102,7 @@ class AuthController extends Controller
      *     tags={"Authentification"},
      *     summary="Refresh the access token",
      *     description="Refresh and return the access token.",
-     *     security={"sanctum": {}},
+     *     security={{"refresh_token": {}}},
      *
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=401, description="Unauthorized"),
