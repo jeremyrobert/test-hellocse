@@ -18,4 +18,14 @@ class ProfileService
             ...$data,
         ]);
     }
+
+    /**
+     * Update the profile with the given data.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Profile $profile, array $data): Profile
+    {
+        return tap($profile)->update($data);
+    }
 }
