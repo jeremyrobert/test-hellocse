@@ -82,6 +82,7 @@ class ProfileController
      *
      *     @OA\Response(response=200, description="Profile updated successfully"),
      *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="Not Found"),
      *     @OA\Response(response=422, description="Unprocessable Content"),
      *     @OA\Response(response=429, description="Too Many Requests"),
      * )
@@ -97,5 +98,35 @@ class ProfileController
         $this->profileService->update($profile, $data);
 
         return ProfileResource::make($profile);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/profiles/{profile}",
+     *     tags={"Profiles"},
+     *     summary="Delete a profile.",
+     *     description="Delete the profile with the given ID.",
+     *     security={{"access_token": {}}},
+     *     @OA\Parameter(
+     *          name="profile",
+     *          in="path",
+     *          required=true,
+     *          description="The ID of the profile",
+     *          @OA\Schema(
+     *               type="integer",
+     *          ),
+     *     ),
+     *
+     *     @OA\Response(response=204, description="Profile deleted successfully"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=404, description="Not Found"),
+     *     @OA\Response(response=429, description="Too Many Requests"),
+     * )
+     */
+    public function destroy(Profile $profile): JsonResponse
+    {
+        $this->profileService->destroy($profile);
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -175,8 +175,49 @@
                     "401": {
                         "description": "Unauthorized"
                     },
+                    "404": {
+                        "description": "Not Found"
+                    },
                     "422": {
                         "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Delete a profile.",
+                "description": "Delete the profile with the given ID.",
+                "operationId": "7144b28409bed3f33d064b999499f213",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "The ID of the profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Profile deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     },
                     "429": {
                         "description": "Too Many Requests"
