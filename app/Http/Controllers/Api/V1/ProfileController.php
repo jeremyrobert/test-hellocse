@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\V1\Profile\StoreProfileRequest;
+use App\Http\Requests\V1\Profile\UpdateProfileRequest;
 use App\Http\Resources\Api\V1\Profile\ProfileResource;
+use App\Models\Profile;
 use App\Services\V1\FileUploadService;
 use App\Services\V1\ProfileService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * @OA\Tag(
- *     name="Profile",
+ *     name="Profiles",
  *     description="Group of endpoints for managing profiles."
  * )
  */
@@ -22,8 +26,8 @@ class ProfileController
 
     /**
      * @OA\Post(
-     *     path="/api/v1/profile",
-     *     tags={"Profile"},
+     *     path="/api/v1/profiles",
+     *     tags={"Profiles"},
      *     summary="Store a new profile.",
      *     description="Store a new profile with the given data.",
      *     security={{"access_token": {}}},
@@ -36,7 +40,7 @@ class ProfileController
      *          )
      *     ),
      *
-     *     @OA\Response(response=200, description="Successful login"),
+     *     @OA\Response(response=201, description="Profile created successfully"),
      *     @OA\Response(response=401, description="Unauthorized"),
      *     @OA\Response(response=422, description="Unprocessable Content"),
      *     @OA\Response(response=429, description="Too Many Requests"),
@@ -47,6 +51,50 @@ class ProfileController
         $data = $request->validated();
         $data['image'] = $this->fileUploadService->store($request->validated('image'), 'images');
         $profile = $this->profileService->store($data);
+
+        return ProfileResource::make($profile);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/v1/profiles/{profile}",
+     *     tags={"Profiles"},
+     *     summary="Update a profile.",
+     *     description="Update the profile with the given data.",
+     *     security={{"access_token": {}}},
+     *     @OA\Parameter(
+     *          name="profile",
+     *          in="path",
+     *          required=true,
+     *          description="The ID of the profile",
+     *          @OA\Schema(
+     *               type="integer",
+     *          ),
+     *     ),
+     *
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(ref="#/components/schemas/UpdateProfileRequest")
+     *          )
+     *     ),
+     *
+     *     @OA\Response(response=200, description="Profile updated successfully"),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=422, description="Unprocessable Content"),
+     *     @OA\Response(response=429, description="Too Many Requests"),
+     * )
+     */
+    public function update(UpdateProfileRequest $request, Profile $profile): ProfileResource|JsonResponse
+    {
+        $data = $request->validated();
+
+        if ($request->has('image')) {
+            $data['image'] = $this->fileUploadService->update($request->validated('image'), 'images', $profile->image);
+        }
+
+        $this->profileService->update($profile, $data);
 
         return ProfileResource::make($profile);
     }
