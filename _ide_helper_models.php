@@ -42,8 +42,8 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property string $name
  * @property int $administrator_id
+ * @property string $last_name
  * @property string $first_name
  * @property string $image
  * @property string $status
@@ -59,7 +59,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Profile whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUpdatedAt($value)
  * @mixin \Eloquent
