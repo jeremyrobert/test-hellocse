@@ -3,8 +3,7 @@
 use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::name('api.profile.')->group(function () {
-        Route::post('profile', [ProfileController::class, 'store'])->name('store');
-    });
+Route::middleware('auth:sanctum')->name('api.profiles.')->group(function () {
+    Route::post('profiles', [ProfileController::class, 'store'])->name('store');
+    Route::match(['put', 'patch', 'post'], 'profiles/{profile}', [ProfileController::class, 'update'])->where('profile', '[0-9]+')->name('update');
 });
