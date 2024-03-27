@@ -19,8 +19,8 @@ class Profile extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'administrator_id',
+        'last_name',
         'first_name',
         'image',
         'status',
