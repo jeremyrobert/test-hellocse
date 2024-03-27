@@ -71,7 +71,7 @@ class StoreProfileRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'first_name' => ['required', 'string', 'max:255'],
             'image' => ['required', 'image', 'max:2048'],
-            'status' => [Rule::enum(StatusEnum::class)],
+            'status' => ['required', Rule::enum(StatusEnum::class)],
         ];
     }
 }
