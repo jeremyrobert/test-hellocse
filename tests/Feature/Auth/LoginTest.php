@@ -24,7 +24,7 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.login'), $requestBody)
+        $this->postJson(route('api.auth.login'), $requestBody)
             ->assertOk()
             ->assertJsonStructure(['access_token', 'refresh_token']);
     }
@@ -41,7 +41,7 @@ class LoginTest extends TestCase
             'password' => 'invalid-password',
         ];
 
-        $this->postJson(route('api.login'), $requestBody)
+        $this->postJson(route('api.auth.login'), $requestBody)
             ->assertUnauthorized();
     }
 
@@ -55,7 +55,7 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.login'), $requestBody)
+        $this->postJson(route('api.auth.login'), $requestBody)
             ->assertStatus(422)
             ->assertJsonValidationErrors('email');
     }
@@ -70,7 +70,7 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.login'), $requestBody)
+        $this->postJson(route('api.auth.login'), $requestBody)
             ->assertUnauthorized();
     }
 
@@ -85,7 +85,7 @@ class LoginTest extends TestCase
         $tokens = $tokenService->createToken($administrator);
 
         $this->actingAs($administrator)
-            ->getJson(route('api.refresh-token'), ['Authorization' => 'Bearer '.$tokens['refresh_token']])
+            ->getJson(route('api.auth.refresh-token'), ['Authorization' => 'Bearer '.$tokens['refresh_token']])
             ->assertOk()
             ->assertJsonStructure(['access_token']);
     }

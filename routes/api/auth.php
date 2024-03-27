@@ -4,7 +4,7 @@ use App\Enums\TokenAbility;
 use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->name('api.')->group(function () {
+Route::prefix('auth')->name('api.auth.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::post('register', [AuthController::class, 'register'])->name('register');
         Route::post('login', [AuthController::class, 'login'])

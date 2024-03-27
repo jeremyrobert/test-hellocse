@@ -20,7 +20,7 @@ class RegisterTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.register'), $requestBody)
+        $this->postJson(route('api.auth.register'), $requestBody)
             ->assertCreated();
 
         $this->assertDatabaseHas(Administrator::class, [
@@ -40,7 +40,7 @@ class RegisterTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.register'), $requestBody)
+        $this->postJson(route('api.auth.register'), $requestBody)
             ->assertStatus(422)
             ->assertJsonValidationErrors('email');
     }
@@ -55,7 +55,7 @@ class RegisterTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(route('api.register'), $requestBody)
+        $this->postJson(route('api.auth.register'), $requestBody)
             ->assertStatus(422)
             ->assertJsonValidationErrors('email');
     }
@@ -70,7 +70,7 @@ class RegisterTest extends TestCase
             'password' => 'pass',
         ];
 
-        $this->postJson(route('api.register'), $requestBody)
+        $this->postJson(route('api.auth.register'), $requestBody)
             ->assertStatus(422)
             ->assertJsonValidationErrors('password');
     }
@@ -85,7 +85,7 @@ class RegisterTest extends TestCase
             'password' => 'passwordpasswordpasswordpasswordpassword',
         ];
 
-        $this->postJson(route('api.register'), $requestBody)
+        $this->postJson(route('api.auth.register'), $requestBody)
             ->assertStatus(422)
             ->assertJsonValidationErrors('password');
     }

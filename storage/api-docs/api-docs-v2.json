@@ -17,7 +17,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/RegisterRequest"
                             }
@@ -45,7 +45,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/LoginRequest"
                             }
@@ -87,9 +87,11 @@
                         "description": "Unprocessable Content"
                     }
                 },
-                "security": {
-                    "sanctum": {}
-                }
+                "security": [
+                    {
+                        "refresh_token": []
+                    }
+                ]
             }
         }
     },
@@ -140,12 +142,55 @@
                     }
                 },
                 "type": "object"
+            },
+            "StoreProfileRequest": {
+                "title": "Store Profile Request",
+                "description": "Request structure for storing a new profile.",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "image",
+                    "status"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string",
+                        "format": "base64"
+                    },
+                    "status": {
+                        "description": "The status of the profile",
+                        "type": "string",
+                        "enum": [
+                            "inactive",
+                            "pending",
+                            "active"
+                        ]
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
-            "sanctum": {
+            "access_token": {
                 "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
+                "description": "Enter token in format (Bearer {token})",
+                "name": "Authorization",
+                "in": "header"
+            },
+            "refresh_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer {token})",
                 "name": "Authorization",
                 "in": "header"
             }
