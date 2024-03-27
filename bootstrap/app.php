@@ -10,11 +10,13 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api/api.php',
         apiPrefix: 'api',
         then: function () {
-            Route::prefix('api/v1')->group(function () {
-                require __DIR__.'/../routes/api/v1.php';
-            });
-            Route::prefix('api/v2')->group(function () {
-                require __DIR__.'/../routes/api/v2.php';
+            Route::middleware('throttle:api')->group(function () {
+                Route::prefix('api/v1')->group(function () {
+                    require __DIR__.'/../routes/api/v1.php';
+                });
+                Route::prefix('api/v2')->group(function () {
+                    require __DIR__.'/../routes/api/v2.php';
+                });
             });
         },
     )
