@@ -23,7 +23,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/RegisterRequest"
                             }
@@ -51,7 +51,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/LoginRequest"
                             }
@@ -93,9 +93,50 @@
                         "description": "Unprocessable Content"
                     }
                 },
-                "security": {
-                    "sanctum": {}
-                }
+                "security": [
+                    {
+                        "refresh_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Store a new profile.",
+                "description": "Store a new profile with the given data.",
+                "operationId": "d7071a56393c5fd063728deebf0f30d2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
             }
         }
     },
@@ -146,12 +187,55 @@
                     }
                 },
                 "type": "object"
+            },
+            "StoreProfileRequest": {
+                "title": "Store Profile Request",
+                "description": "Request structure for storing a new profile.",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "image",
+                    "status"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string",
+                        "format": "base64"
+                    },
+                    "status": {
+                        "description": "The status of the profile",
+                        "type": "string",
+                        "enum": [
+                            "inactive",
+                            "pending",
+                            "active"
+                        ]
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
-            "sanctum": {
+            "access_token": {
                 "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
+                "description": "Enter token in format (Bearer {token})",
+                "name": "Authorization",
+                "in": "header"
+            },
+            "refresh_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer {token})",
                 "name": "Authorization",
                 "in": "header"
             }
@@ -161,6 +245,10 @@
         {
             "name": "Authentification",
             "description": "Group of endpoints for authentification."
+        },
+        {
+            "name": "Profile",
+            "description": "Group of endpoints for managing profiles."
         }
     ]
 }
