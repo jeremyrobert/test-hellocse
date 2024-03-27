@@ -4,6 +4,7 @@ namespace App\Services\V1;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Storage;
 
 class FileUploadService
 {
@@ -17,5 +18,15 @@ class FileUploadService
         $file->storePubliclyAs('public/'.$folder, $name);
 
         return $name;
+    }
+
+    /**
+     * Update file in storage.
+     */
+    public function update(UploadedFile $file, string $folder, string $oldFile): string
+    {
+        Storage::disk('public')->delete($oldFile);
+
+        return $this->store($file, $folder);
     }
 }
