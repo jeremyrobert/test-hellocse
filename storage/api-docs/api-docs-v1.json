@@ -62,8 +62,14 @@
                     "200": {
                         "description": "Successful login"
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "422": {
                         "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
                     }
                 }
             }
@@ -79,6 +85,9 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     },
                     "422": {
                         "description": "Unprocessable Content"
