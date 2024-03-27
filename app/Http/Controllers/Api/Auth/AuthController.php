@@ -10,6 +10,7 @@ use App\Services\Auth\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @OA\Tag(
@@ -62,13 +63,18 @@ class AuthController extends Controller
      *     ),
      *
      *     @OA\Response(response=200, description="Successful login"),
-     *     @OA\Response(response=422, description="Unprocessable Content"),
      *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=422, description="Unprocessable Content"),
+     *     @OA\Response(response=429, description="Too Many Requests"),
      * )
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        if (! Auth::attempt($request->only('email', 'password'))) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ])->status(401);
+        }
 
         $administrator = Auth::user();
 
@@ -93,8 +99,8 @@ class AuthController extends Controller
      *     security={"sanctum": {}},
      *
      *     @OA\Response(response=200, description="Successful operation"),
-     *     @OA\Response(response=422, description="Unprocessable Content"),
      *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=422, description="Unprocessable Content"),
      * )
      */
     public function refreshToken(): JsonResponse

@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->name('api.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::post('register', [AuthController::class, 'register'])->name('register');
-        Route::post('login', [AuthController::class, 'login'])->name('login');
+        Route::post('login', [AuthController::class, 'login'])
+            ->middleware('throttle:login')
+            ->name('login');
     });
 
     Route::get('refresh-token', [AuthController::class, 'refreshToken'])
