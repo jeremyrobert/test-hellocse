@@ -18,10 +18,10 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
             'administrator_id' => Administrator::inRandomOrder()->first(),
+            'last_name' => $this->faker->name,
             'first_name' => $this->faker->firstName,
-            'image' => $this->faker->imageUrl(),
+            'image' => $this->faker->image('public/storage/images', 640, 480, null, false),
             'status' => $this->faker->randomElement(['inactive', 'pending', 'active']),
         ];
     }
