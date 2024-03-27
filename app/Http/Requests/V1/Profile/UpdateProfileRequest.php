@@ -10,10 +10,9 @@ use Illuminate\Validation\Rule;
 
 /**
  * @OA\Schema(
- *     schema="StoreProfileRequest",
- *     title="Store Profile Request",
- *     description="Request structure for storing a new profile.",
- *     required={"last_name", "first_name", "image", "status"},
+ *     schema="UpdateProfileRequest",
+ *     title="Update Profile Request",
+ *     description="Request structure for update a profile.",
  *     @OA\Property(
  *         property="last_name",
  *         type="string",
@@ -40,7 +39,7 @@ use Illuminate\Validation\Rule;
  *     )
  * )
  */
-class StoreProfileRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -55,9 +54,11 @@ class StoreProfileRequest extends FormRequest
      */
     public function prepareForValidation(): void
     {
-        $this->merge([
-            'status' => Str::lower($this->status),
-        ]);
+        if ($this->status) {
+            $this->merge([
+                'status' => Str::lower($this->status),
+            ]);
+        }
     }
 
     /**
@@ -68,10 +69,10 @@ class StoreProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'last_name' => ['required', 'string', 'max:255'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'image', 'max:2048'],
-            'status' => ['required', Rule::enum(StatusEnum::class)],
+            'last_name' => ['string', 'max:255'],
+            'first_name' => ['string', 'max:255'],
+            'image' => ['image', 'max:2048'],
+            'status' => [Rule::enum(StatusEnum::class)],
         ];
     }
 }

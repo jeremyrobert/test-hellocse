@@ -100,14 +100,14 @@
                 ]
             }
         },
-        "/api/v1/profile": {
+        "/api/v1/profiles": {
             "post": {
                 "tags": [
-                    "Profile"
+                    "Profiles"
                 ],
                 "summary": "Store a new profile.",
                 "description": "Store a new profile with the given data.",
-                "operationId": "d7071a56393c5fd063728deebf0f30d2",
+                "operationId": "7cad69783ae4b4ad2f55eb818a6cae62",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -119,8 +119,58 @@
                     }
                 },
                 "responses": {
+                    "201": {
+                        "description": "Profile created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profiles/{profile}": {
+            "put": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Update a profile.",
+                "description": "Update the profile with the given data.",
+                "operationId": "522545903b5825204314f1326a3a8cb1",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "The ID of the profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
                     "200": {
-                        "description": "Successful login"
+                        "description": "Profile updated successfully"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -224,6 +274,37 @@
                     }
                 },
                 "type": "object"
+            },
+            "UpdateProfileRequest": {
+                "title": "Update Profile Request",
+                "description": "Request structure for update a profile.",
+                "properties": {
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string",
+                        "format": "base64"
+                    },
+                    "status": {
+                        "description": "The status of the profile",
+                        "type": "string",
+                        "enum": [
+                            "inactive",
+                            "pending",
+                            "active"
+                        ]
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -247,7 +328,7 @@
             "description": "Group of endpoints for authentification."
         },
         {
-            "name": "Profile",
+            "name": "Profiles",
             "description": "Group of endpoints for managing profiles."
         }
     ]

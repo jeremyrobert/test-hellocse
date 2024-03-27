@@ -20,6 +20,8 @@ namespace App\Models{
  * @property mixed $password
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Profile> $profiles
+ * @property-read int|null $profiles_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\AdministratorFactory factory($count = null, $state = [])
