@@ -12,9 +12,9 @@ class FileUploadService
      */
     public function store(UploadedFile $file, string $folder): string
     {
-        $name = $folder.'/'.Str::uuid().'.'.$file->extension();
+        $name = Str::uuid().'.'.$file->extension();
 
-        $file->storePubliclyAs('public', $name);
+        $file->storePubliclyAs('public/'.$folder, $name);
 
         return $name;
     }
