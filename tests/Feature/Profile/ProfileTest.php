@@ -115,4 +115,28 @@ class ProfileTest extends TestCase
         Storage::disk('local')->assertMissing('public/images/'.$profile->image);
         Storage::disk('local')->assertExists('public/images/'.$response['image']);
     }
+
+    /**
+     * Test an administrator can delete a profile.
+     */
+    public function test_administrator_can_delete_profile()
+    {
+        Storage::fake('local');
+
+        $administrator = Administrator::factory()->create();
+
+        $profile = $administrator->profiles()->create([
+            'last_name' => 'Doe',
+            'first_name' => 'John',
+            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
+            'status' => 'active',
+        ]);
+
+        $response = $this->actingAs($administrator)
+            ->deleteJson(route('api.profiles.destroy', $profile));
+
+        $response->assertNoContent();
+        $this->assertModelMissing($profile);
+        Storage::disk('local')->assertMissing('public/images/'.$profile->image);
+    }
 }
