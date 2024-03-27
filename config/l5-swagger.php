@@ -13,6 +13,7 @@ return [
                  * Route for accessing api documentation interface
                 */
                 'api' => 'api/documentation/v1',
+                'docs' => 'api/documentation/v1',
                 'oauth2_callback' => 'api/v1/oauth2-callback',
             ],
             'paths' => [
@@ -57,6 +58,7 @@ return [
                  * Route for accessing api documentation interface
                 */
                 'api' => 'api/documentation/v2',
+                'docs' => 'api/documentation/v2',
                 'oauth2_callback' => 'api/v2/oauth2-callback',
             ],
             'paths' => [
