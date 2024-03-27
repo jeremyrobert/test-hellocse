@@ -28,4 +28,12 @@ class ProfileService
     {
         return tap($profile)->update($data);
     }
+
+    /**
+     * Delete the profile.
+     */
+    public function destroy(Profile $profile): bool
+    {
+        return $profile->delete();
+    }
 }
