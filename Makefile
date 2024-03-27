@@ -150,10 +150,14 @@ analyse: ## PHP Static Analysis.
 	./vendor/bin/phpstan analyse
 .PHONY: analyse
 
+documentation: ## Generate documentation.
+	$(ARTISAN) l5-swagger:generate --all
+
 before-commit: ## Run before commit.
 	$(MAKE) -s helpers
 	$(MAKE) -s lint
 	$(MAKE) -s analyse
+	$(MAKE) -s documentation
 	$(MAKE) -s test
 .PHONY: before-commit
 
