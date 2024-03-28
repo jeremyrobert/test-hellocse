@@ -21,7 +21,8 @@ class ProfileFactory extends Factory
             'administrator_id' => Administrator::inRandomOrder()->first(),
             'last_name' => $this->faker->name,
             'first_name' => $this->faker->firstName,
-            'image' => $this->faker->image('public/storage/images', 640, 480, null, false),
+            // 'image' => $this->faker->image('public/storage/images', 16, 16, null, false, false), // Too slow to generate
+            'image' => $this->faker->imageUrl(16, 16, 'cats'),                                      // No file, but faster to generate
             'status' => $this->faker->randomElement(['inactive', 'pending', 'active']),
         ];
     }
