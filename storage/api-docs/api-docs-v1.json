@@ -100,6 +100,63 @@
                 ]
             }
         },
+        "/api/v1/profiles/{profile}/comments": {
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Store a new comment.",
+                "description": "Store a new comment for the given profile.",
+                "operationId": "0f949f23fb5fedde04114bf5020aeb91",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "The unique identifier of the profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCommentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response: Comment created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
         "/api/v1/profiles": {
             "get": {
                 "tags": [
@@ -340,6 +397,21 @@
                 },
                 "type": "object"
             },
+            "StoreCommentRequest": {
+                "title": "Store Comment Request",
+                "description": "Store Comment request body data",
+                "required": [
+                    "content"
+                ],
+                "properties": {
+                    "content": {
+                        "description": "The content of the comment",
+                        "type": "string",
+                        "example": "This is a comment"
+                    }
+                },
+                "type": "object"
+            },
             "StoreProfileRequest": {
                 "title": "Store Profile Request",
                 "description": "Request structure for storing a new profile.",
@@ -408,6 +480,34 @@
                 },
                 "type": "object"
             },
+            "CommentResource": {
+                "title": "Comment Resource",
+                "description": "Comment resource",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the profile",
+                        "type": "integer"
+                    },
+                    "profile_id": {
+                        "description": "The unique identifier of the profile",
+                        "type": "integer"
+                    },
+                    "administrator_id": {
+                        "description": "The unique identifier of the administrator",
+                        "type": "integer"
+                    },
+                    "content": {
+                        "description": "The content of the comment",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "The date and time the comment was created",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
             "ProfileResource": {
                 "title": "Profile Resource",
                 "description": "Profile resource",
@@ -460,6 +560,10 @@
         {
             "name": "Authentification",
             "description": "Group of endpoints for authentification."
+        },
+        {
+            "name": "Comments",
+            "description": "Group of endpoints for managing comments."
         },
         {
             "name": "Profiles",
