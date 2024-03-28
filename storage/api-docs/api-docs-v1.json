@@ -23,7 +23,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/RegisterRequest"
                             }
@@ -51,7 +51,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/LoginRequest"
                             }
@@ -93,9 +93,202 @@
                         "description": "Unprocessable Content"
                     }
                 },
-                "security": {
-                    "sanctum": {}
+                "security": [
+                    {
+                        "refresh_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profiles": {
+            "get": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Get a list of active profiles.",
+                "description": "Get a list of active profiles with pagination.",
+                "operationId": "f301792bb5be5f7d940e04c16c077ab3",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of profiles per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Current page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response: List of profiles.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "profiles": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/ProfileResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Store a new profile.",
+                "description": "Store a new profile with the given data.",
+                "operationId": "7cad69783ae4b4ad2f55eb818a6cae62",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Profile created successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profiles/{profile}": {
+            "put": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Update a profile.",
+                "description": "Update the profile with the given data.",
+                "operationId": "522545903b5825204314f1326a3a8cb1",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "The ID of the profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Profiles"
+                ],
+                "summary": "Delete a profile.",
+                "description": "Delete the profile with the given ID.",
+                "operationId": "7144b28409bed3f33d064b999499f213",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "The ID of the profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Profile deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
             }
         }
     },
@@ -146,12 +339,118 @@
                     }
                 },
                 "type": "object"
+            },
+            "StoreProfileRequest": {
+                "title": "Store Profile Request",
+                "description": "Request structure for storing a new profile.",
+                "required": [
+                    "last_name",
+                    "first_name",
+                    "image",
+                    "status"
+                ],
+                "properties": {
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string",
+                        "format": "base64"
+                    },
+                    "status": {
+                        "description": "The status of the profile",
+                        "type": "string",
+                        "enum": [
+                            "inactive",
+                            "pending",
+                            "active"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProfileRequest": {
+                "title": "Update Profile Request",
+                "description": "Request structure for update a profile.",
+                "properties": {
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string",
+                        "format": "base64"
+                    },
+                    "status": {
+                        "description": "The status of the profile",
+                        "type": "string",
+                        "enum": [
+                            "inactive",
+                            "pending",
+                            "active"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ProfileResource": {
+                "title": "Profile Resource",
+                "description": "Profile resource",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the profile",
+                        "type": "integer"
+                    },
+                    "administrator_id": {
+                        "description": "The unique identifier of the administrator",
+                        "type": "integer"
+                    },
+                    "last_name": {
+                        "description": "The last name of the profile",
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "description": "The first name of the profile",
+                        "type": "string"
+                    },
+                    "image": {
+                        "description": "The image of the profile",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "The date and time of the profile creation",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
-            "sanctum": {
+            "access_token": {
                 "type": "apiKey",
-                "description": "Enter token in format (Bearer <token>)",
+                "description": "Enter token in format (Bearer {token})",
+                "name": "Authorization",
+                "in": "header"
+            },
+            "refresh_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer {token})",
                 "name": "Authorization",
                 "in": "header"
             }
@@ -161,6 +460,10 @@
         {
             "name": "Authentification",
             "description": "Group of endpoints for authentification."
+        },
+        {
+            "name": "Profiles",
+            "description": "Group of endpoints for managing profiles."
         }
     ]
 }

@@ -20,6 +20,8 @@ namespace App\Models{
  * @property mixed $password
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Profile> $profiles
+ * @property-read int|null $profiles_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\AdministratorFactory factory($count = null, $state = [])
@@ -42,14 +44,15 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property string $name
  * @property int $administrator_id
+ * @property string $last_name
  * @property string $first_name
  * @property string $image
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Administrator $administrator
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile active()
  * @method static \Database\Factories\ProfileFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Profile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Profile newQuery()
@@ -59,7 +62,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Profile whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUpdatedAt($value)
  * @mixin \Eloquent

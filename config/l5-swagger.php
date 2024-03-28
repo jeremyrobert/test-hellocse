@@ -43,6 +43,7 @@ return [
                 'annotations' => [
                     base_path('app').'/Http/Controllers/Api/Auth',
                     base_path('app').'/Http/Controllers/Api/V1',
+                    base_path('app').'/Http/Resources/Api/V1',
                     base_path('app').'/Http/Requests',
                 ],
 
@@ -88,6 +89,7 @@ return [
                 'annotations' => [
                     base_path('app').'/Http/Controllers/Api/Auth',
                     base_path('app').'/Http/Controllers/Api/V2',
+                    base_path('app').'/Http/Resources/Api/V2',
                     base_path('app').'/Http/Requests',
                 ],
 
@@ -241,9 +243,15 @@ return [
                     ],
                 ],
                 */
-                'sanctum' => [ // Unique name of security
+                'access_token' => [ // Unique name of security
                     'type' => 'apiKey', // Valid values are "basic", "apiKey" or "oauth2".
-                    'description' => 'Enter token in format (Bearer <token>)',
+                    'description' => 'Enter token in format (Bearer {token})',
+                    'name' => 'Authorization', // The name of the header or query parameter to be used.
+                    'in' => 'header', // The location of the API key. Valid values are "query" or "header".
+                ],
+                'refresh_token' => [ // Unique name of security
+                    'type' => 'apiKey', // Valid values are "basic", "apiKey" or "oauth2".
+                    'description' => 'Enter token in format (Bearer {token})',
                     'name' => 'Authorization', // The name of the header or query parameter to be used.
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],

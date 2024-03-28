@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -42,5 +43,15 @@ class Administrator extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the profile associated with the administrator.
+     *
+     * @return HasMany<Profile>
+     */
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(Profile::class);
     }
 }

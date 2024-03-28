@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,12 +20,22 @@ class Profile extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'administrator_id',
+        'last_name',
         'first_name',
         'image',
         'status',
     ];
+
+    /**
+     * Scope a query to only include active profiles.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<Profile>  $query
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', 'active');
+    }
 
     /**
      * Get the administrator that owns the profile.

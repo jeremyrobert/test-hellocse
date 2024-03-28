@@ -4,25 +4,20 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         api: __DIR__.'/../routes/api/api.php',
-        apiPrefix: 'api',
         then: function () {
-            Route::middleware('throttle:api')->group(function () {
-                Route::prefix('api/v1')->group(function () {
-                    require __DIR__.'/../routes/api/v1.php';
-                });
-                Route::prefix('api/v2')->group(function () {
-                    require __DIR__.'/../routes/api/v2.php';
-                });
+            Route::middleware('api', 'throttle:api')->group(function () {
+                Route::prefix('api/v1')->group(base_path('routes/api/v1.php'));
+                Route::prefix('api/v2')->group(base_path('routes/api/v2.php'));
             });
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        $middleware->prepend([
             \App\Http\Middleware\ForceJsonResponse::class,
         ]);
         $middleware->alias([
@@ -31,5 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(function (NotFoundHttpException $e) {
+            return response()->json(['message' => __('Not Found')], 404);
+        });
     })->create();
