@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Administrator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +17,6 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'administrator_id' => Administrator::inRandomOrder()->first(),
             'last_name' => $this->faker->name,
             'first_name' => $this->faker->firstName,
             // 'image' => $this->faker->image('public/storage/images', 16, 16, null, false, false), // Too slow to generate
