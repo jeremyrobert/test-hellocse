@@ -54,7 +54,7 @@ class CommentController
      *     @OA\Response(response=429, description="Too Many Requests"),
      * )
      */
-    public function store(StoreCommentRequest $request, Profile $profile)
+    public function store(StoreCommentRequest $request, Profile $profile): CommentResource
     {
         $comment = $this->commentService->store($profile, $request->validated());
 

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *      schema="StoreCommentRequest",
  *      title="Store Comment Request",
  *      description="Store Comment request body data",
- *      required={"content"}
+ *      required={"content"},
  *
  *      @OA\Property(
  *            property="content",
