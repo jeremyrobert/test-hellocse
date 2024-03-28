@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Profile;
+namespace Tests\Feature;
 
 use App\Models\Administrator;
 use App\Models\Profile;
@@ -18,9 +18,6 @@ class ProfileTest extends TestCase
      */
     public function test_guest_can_get_list_of_active_profiles()
     {
-        Administrator::factory()->create();
-        Profile::factory(10)->create();
-
         $response = $this->getJson(route('api.profiles.index'));
 
         $response->assertOk();
@@ -53,8 +50,7 @@ class ProfileTest extends TestCase
      */
     public function test_administrator_can_get_list_of_active_profiles_and_show_status()
     {
-        $administrator = Administrator::factory()->create();
-        Profile::factory(10)->create();
+        $administrator = Administrator::inRandomOrder()->first();
 
         $response = $this->actingAs($administrator)
             ->getJson(route('api.profiles.index'));
@@ -82,7 +78,7 @@ class ProfileTest extends TestCase
     {
         Storage::fake('local');
 
-        $administrator = Administrator::factory()->create();
+        $administrator = Administrator::inRandomOrder()->first();
 
         $response = $this->actingAs($administrator)
             ->postJson(route('api.profiles.store'), [
@@ -111,7 +107,7 @@ class ProfileTest extends TestCase
      */
     public function test_administrator_can_not_store_profile_with_invalid_data()
     {
-        $administrator = Administrator::factory()->create();
+        $administrator = Administrator::inRandomOrder()->first();
 
         $response = $this->actingAs($administrator)
             ->postJson(route('api.profiles.store'), [
@@ -137,14 +133,8 @@ class ProfileTest extends TestCase
     {
         Storage::fake('local');
 
-        $administrator = Administrator::factory()->create();
-
-        $profile = $administrator->profiles()->create([
-            'last_name' => 'Doe',
-            'first_name' => 'John',
-            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
-            'status' => 'active',
-        ]);
+        $administrator = Administrator::inRandomOrder()->first();
+        $profile = $administrator->profiles->first();
 
         $response = $this->actingAs($administrator)
             ->putJson(route('api.profiles.update', $profile), [
@@ -176,15 +166,10 @@ class ProfileTest extends TestCase
     {
         Storage::fake('local');
 
-        $administrator = Administrator::factory()->create();
-        $anotherAdministrator = Administrator::factory()->create();
+        $administrator = Administrator::find(1);
+        $anotherAdministrator = Administrator::find(2);
 
-        $profile = $anotherAdministrator->profiles()->create([
-            'last_name' => 'Doe',
-            'first_name' => 'John',
-            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
-            'status' => 'active',
-        ]);
+        $profile = $anotherAdministrator->profiles->first();
 
         $response = $this->actingAs($administrator)
             ->putJson(route('api.profiles.update', $profile), [
@@ -204,14 +189,8 @@ class ProfileTest extends TestCase
     {
         Storage::fake('local');
 
-        $administrator = Administrator::factory()->create();
-
-        $profile = $administrator->profiles()->create([
-            'last_name' => 'Doe',
-            'first_name' => 'John',
-            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
-            'status' => 'active',
-        ]);
+        $administrator = Administrator::inRandomOrder()->first();
+        $profile = $administrator->profiles->first();
 
         $response = $this->actingAs($administrator)
             ->deleteJson(route('api.profiles.destroy', $profile));
@@ -228,15 +207,10 @@ class ProfileTest extends TestCase
     {
         Storage::fake('local');
 
-        $administrator = Administrator::factory()->create();
-        $anotherAdministrator = Administrator::factory()->create();
+        $administrator = Administrator::find(1);
+        $anotherAdministrator = Administrator::find(2);
 
-        $profile = $anotherAdministrator->profiles()->create([
-            'last_name' => 'Doe',
-            'first_name' => 'John',
-            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
-            'status' => 'active',
-        ]);
+        $profile = $anotherAdministrator->profiles->first();
 
         $response = $this->actingAs($administrator)
             ->deleteJson(route('api.profiles.destroy', $profile));
