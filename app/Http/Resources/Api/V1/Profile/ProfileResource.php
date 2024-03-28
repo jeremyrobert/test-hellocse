@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V1\Profile;
 
+use App\Http\Resources\Api\V1\Comment\CommentResource;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -44,6 +45,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          format="date-time",
  *          description="The date and time of the profile creation"
  *     ),
+ *     @OA\Property(
+ *          property="comments",
+ *          type="array",
+ *          @OA\Items(ref="#/components/schemas/CommentResource"),
+ *          description="The comments of the profile"
+ *     ),
  * )
  */
 class ProfileResource extends JsonResource
@@ -63,6 +70,7 @@ class ProfileResource extends JsonResource
             'image' => $this->image,
             'status' => $this->when(Auth::check(), $this->status),
             'created_at' => $this->created_at->toDateTimeString(),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
         ];
     }
 }

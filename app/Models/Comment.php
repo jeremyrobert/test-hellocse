@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin IdeHelperComment
+ */
 class Comment extends Model
 {
     use HasFactory;
@@ -22,16 +26,20 @@ class Comment extends Model
 
     /**
      * Get the profile that owns the comment.
+     *
+     * @return BelongsTo<Profile, Comment>
      */
-    public function profile()
+    public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class);
     }
 
     /**
      * Get the administrator that owns the comment.
+     *
+     * @return BelongsTo<Administrator, Comment>
      */
-    public function administrator()
+    public function administrator(): BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }

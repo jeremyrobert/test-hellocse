@@ -57,6 +57,8 @@ class Administrator extends Authenticatable
 
     /**
      * Get the profiles associated with the administrator that have no comments.
+     *
+     * @return HasMany<Profile>
      */
     public function profilesWithoutComments(): HasMany
     {

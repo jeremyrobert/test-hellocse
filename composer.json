@@ -22,6 +22,7 @@
         "laravel-lang/common": "^6.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
+        "laravel/telescope": "^5.0",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^10.5",
@@ -58,7 +59,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {
