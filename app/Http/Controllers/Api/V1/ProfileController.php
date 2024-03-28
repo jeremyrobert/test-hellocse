@@ -55,19 +55,8 @@ class ProfileController
      *     ),
      *     @OA\Response(
      *          response=200,
-     *          description="Successful response: List of profiles.",
-     *          @OA\JsonContent(
-     *               type="object",
-     *               @OA\Property(
-     *                    property="data",
-     *                    type="object",
-     *                    @OA\Property(
-     *                         property="profiles",
-     *                         type="array",
-     *                         @OA\Items(ref="#/components/schemas/ProfileResource")
-     *                    )
-     *               )
-     *          )
+     *          description="List of profiles",
+     *          @OA\JsonContent(ref="#/components/schemas/ProfileCollection")
      *     ),
      *     @OA\Response(response=401, description="Unauthorized"),
      *     @OA\Response(response=429, description="Too Many Requests"),
@@ -76,7 +65,7 @@ class ProfileController
     public function index(Request $request): ProfileCollection
     {
         $limit = (int) $request->query('limit', '5');
-        $profiles = Profile::active()->paginate($limit);
+        $profiles = Profile::active()->with('comments')->paginate($limit);
 
         return new ProfileCollection($profiles);
     }

@@ -45,6 +45,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          format="date-time",
  *          description="The date and time of the profile creation"
  *     ),
+ *     @OA\Property(
+ *          property="comments",
+ *          type="array",
+ *          @OA\Items(ref="#/components/schemas/CommentResource"),
+ *          description="The comments of the profile"
+ *     ),
  * )
  */
 class ProfileResource extends JsonResource

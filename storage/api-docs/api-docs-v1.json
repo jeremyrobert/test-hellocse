@@ -189,24 +189,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response: List of profiles.",
+                        "description": "List of profiles",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "profiles": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "$ref": "#/components/schemas/ProfileResource"
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ProfileCollection"
                                 }
                             }
                         }
@@ -480,6 +467,20 @@
                 },
                 "type": "object"
             },
+            "CommentCollection": {
+                "title": "Comment Collection",
+                "description": "Comment collection",
+                "properties": {
+                    "data": {
+                        "description": "The list of comments",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CommentResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CommentResource": {
                 "title": "Comment Resource",
                 "description": "Comment resource",
@@ -504,6 +505,20 @@
                         "description": "The date and time the comment was created",
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ProfileCollection": {
+                "title": "Profile Collection",
+                "description": "Profile collection",
+                "properties": {
+                    "data": {
+                        "description": "The list of profiles",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProfileResource"
+                        }
                     }
                 },
                 "type": "object"
@@ -536,6 +551,13 @@
                         "description": "The date and time of the profile creation",
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "comments": {
+                        "description": "The comments of the profile",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CommentResource"
+                        }
                     }
                 },
                 "type": "object"
