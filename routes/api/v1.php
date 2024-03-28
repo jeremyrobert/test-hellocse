@@ -8,3 +8,8 @@ Route::middleware('auth:sanctum')->name('api.profiles.')->group(function () {
     Route::match(['put', 'patch', 'post'], 'profiles/{profile}', [ProfileController::class, 'update'])->where('profile', '[0-9]+')->name('update');
     Route::delete('profiles/{profile}', [ProfileController::class, 'destroy'])->where('profile', '[0-9]+')->name('destroy');
 });
+
+// Dynamic middleware based on request header (to show the status of the profile or not => ProfileResource)
+Route::middleware(Request::header('Authorization') ? ['auth:sanctum'] : [])->name('api.profiles.')->group(function () {
+    Route::get('profiles', [ProfileController::class, 'index'])->where('profile', '[0-9]+')->name('index');
+});

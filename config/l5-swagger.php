@@ -43,6 +43,7 @@ return [
                 'annotations' => [
                     base_path('app').'/Http/Controllers/Api/Auth',
                     base_path('app').'/Http/Controllers/Api/V1',
+                    base_path('app').'/Http/Resources/Api/V1',
                     base_path('app').'/Http/Requests',
                 ],
 
@@ -88,6 +89,7 @@ return [
                 'annotations' => [
                     base_path('app').'/Http/Controllers/Api/Auth',
                     base_path('app').'/Http/Controllers/Api/V2',
+                    base_path('app').'/Http/Resources/Api/V2',
                     base_path('app').'/Http/Requests',
                 ],
 
