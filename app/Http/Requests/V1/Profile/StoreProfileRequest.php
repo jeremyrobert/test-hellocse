@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1\Profile;
 
 use App\Enums\StatusEnum;
-use App\Enums\TokenAbility;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -47,7 +46,7 @@ class StoreProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->tokenCan(TokenAbility::ACCESS_API->value);
+        return true;
     }
 
     /**

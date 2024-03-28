@@ -39,6 +39,16 @@ class ProfileTest extends TestCase
     }
 
     /**
+     * Test a guest can not store a profile.
+     */
+    public function test_guest_can_not_store_profile()
+    {
+        $response = $this->postJson(route('api.profiles.store'));
+
+        $response->assertUnauthorized();
+    }
+
+    /**
      * Test an administrator can get a list of active profiles and show status.
      */
     public function test_administrator_can_get_list_of_active_profiles_and_show_status()
@@ -63,16 +73,6 @@ class ProfileTest extends TestCase
                 ],
             ],
         ]);
-    }
-
-    /**
-     * Test a guest can not store a profile.
-     */
-    public function test_guest_can_not_store_profile()
-    {
-        $response = $this->postJson(route('api.profiles.store'));
-
-        $response->assertUnauthorized();
     }
 
     /**
@@ -170,6 +170,34 @@ class ProfileTest extends TestCase
     }
 
     /**
+     * Test an administrator can not update a profile from another administrator.
+     */
+    public function test_administrator_can_not_update_profile_from_another_administrator()
+    {
+        Storage::fake('local');
+
+        $administrator = Administrator::factory()->create();
+        $anotherAdministrator = Administrator::factory()->create();
+
+        $profile = $anotherAdministrator->profiles()->create([
+            'last_name' => 'Doe',
+            'first_name' => 'John',
+            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
+            'status' => 'active',
+        ]);
+
+        $response = $this->actingAs($administrator)
+            ->putJson(route('api.profiles.update', $profile), [
+                'first_name' => 'Jane',
+                'last_name' => 'Smith',
+                'image' => UploadedFile::fake()->image('image.jpg')->size(100),
+                'status' => 'inactive',
+            ]);
+
+        $response->assertForbidden();
+    }
+
+    /**
      * Test an administrator can delete a profile.
      */
     public function test_administrator_can_delete_profile()
@@ -191,5 +219,29 @@ class ProfileTest extends TestCase
         $response->assertNoContent();
         $this->assertModelMissing($profile);
         Storage::disk('local')->assertMissing('public/images/'.$profile->image);
+    }
+
+    /**
+     * Test an administrator can not delete a profile from another administrator.
+     */
+    public function test_administrator_can_not_delete_profile_from_another_administrator()
+    {
+        Storage::fake('local');
+
+        $administrator = Administrator::factory()->create();
+        $anotherAdministrator = Administrator::factory()->create();
+
+        $profile = $anotherAdministrator->profiles()->create([
+            'last_name' => 'Doe',
+            'first_name' => 'John',
+            'image' => UploadedFile::fake()->image('image.jpg')->size(100),
+            'status' => 'active',
+        ]);
+
+        $response = $this->actingAs($administrator)
+            ->deleteJson(route('api.profiles.destroy', $profile));
+
+        $response->assertForbidden();
+        $this->assertModelExists($profile);
     }
 }

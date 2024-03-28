@@ -12,6 +12,7 @@ use App\Services\V1\ProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * @OA\Tag(
@@ -181,6 +182,8 @@ class ProfileController
      */
     public function destroy(Profile $profile): JsonResponse
     {
+        Gate::authorize('delete', $profile);
+
         $this->profileService->destroy($profile);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
