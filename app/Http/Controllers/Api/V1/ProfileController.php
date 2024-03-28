@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\V1\Profile\StoreProfileRequest;
 use App\Http\Requests\V1\Profile\UpdateProfileRequest;
+use App\Http\Resources\Api\V1\Profile\ProfileCollection;
 use App\Http\Resources\Api\V1\Profile\ProfileResource;
 use App\Models\Profile;
 use App\Services\V1\FileUploadService;
 use App\Services\V1\ProfileService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -23,6 +25,60 @@ class ProfileController
         protected ProfileService $profileService,
         protected FileUploadService $fileUploadService
     ) {}
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/profiles",
+     *     tags={"Profiles"},
+     *     summary="Get a list of active profiles.",
+     *     description="Get a list of active profiles with pagination.",
+     *     @OA\Parameter(
+     *          name="limit",
+     *          in="query",
+     *          description="Number of profiles per page",
+     *          required=false,
+     *          @OA\Schema(
+     *               type="integer",
+     *               default=5
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="Current page number",
+     *          required=false,
+     *          @OA\Schema(
+     *               type="integer",
+     *               default=1
+     *         )
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Successful response: List of profiles.",
+     *          @OA\JsonContent(
+     *               type="object",
+     *               @OA\Property(
+     *                    property="data",
+     *                    type="object",
+     *                    @OA\Property(
+     *                         property="profiles",
+     *                         type="array",
+     *                         @OA\Items(ref="#/components/schemas/ProfileResource")
+     *                    )
+     *               )
+     *          )
+     *     ),
+     *     @OA\Response(response=401, description="Unauthorized"),
+     *     @OA\Response(response=429, description="Too Many Requests"),
+     * )
+     */
+    public function index(Request $request): ProfileCollection
+    {
+        $limit = (int) $request->query('limit', '5');
+        $profiles = Profile::active()->paginate($limit);
+
+        return new ProfileCollection($profiles);
+    }
 
     /**
      * @OA\Post(
