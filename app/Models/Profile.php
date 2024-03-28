@@ -46,4 +46,12 @@ class Profile extends Model
     {
         return $this->belongsTo(Administrator::class);
     }
+
+    /**
+     * Get the comments for the profile.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
