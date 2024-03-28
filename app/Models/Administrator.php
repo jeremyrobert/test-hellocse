@@ -54,4 +54,14 @@ class Administrator extends Authenticatable
     {
         return $this->hasMany(Profile::class);
     }
+
+    /**
+     * Get the comments associated with the administrator.
+     *
+     * @return HasMany<Comment>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
