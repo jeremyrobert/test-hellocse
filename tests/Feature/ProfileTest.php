@@ -30,6 +30,7 @@ class ProfileTest extends TestCase
                     'first_name',
                     'image',
                     'created_at',
+                    'comments',
                 ],
             ],
         ]);
@@ -66,6 +67,7 @@ class ProfileTest extends TestCase
                     'image',
                     'status',
                     'created_at',
+                    'comments',
                 ],
             ],
         ]);
