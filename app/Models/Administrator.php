@@ -46,12 +46,32 @@ class Administrator extends Authenticatable
     }
 
     /**
-     * Get the profile associated with the administrator.
+     * Get the profiles associated with the administrator.
      *
      * @return HasMany<Profile>
      */
     public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class);
+    }
+
+    /**
+     * Get the profiles associated with the administrator that have no comments.
+     *
+     * @return HasMany<Profile>
+     */
+    public function profilesWithoutComments(): HasMany
+    {
+        return $this->profiles()->doesntHave('comments');
+    }
+
+    /**
+     * Get the comments associated with the administrator.
+     *
+     * @return HasMany<Comment>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

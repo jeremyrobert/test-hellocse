@@ -143,6 +143,21 @@
                 },
                 "type": "object"
             },
+            "StoreCommentRequest": {
+                "title": "Store Comment Request",
+                "description": "Store Comment request body data",
+                "required": [
+                    "content"
+                ],
+                "properties": {
+                    "content": {
+                        "description": "The content of the comment",
+                        "type": "string",
+                        "example": "This is a comment"
+                    }
+                },
+                "type": "object"
+            },
             "StoreProfileRequest": {
                 "title": "Store Profile Request",
                 "description": "Request structure for storing a new profile.",
