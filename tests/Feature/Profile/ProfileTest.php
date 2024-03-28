@@ -3,6 +3,7 @@
 namespace Tests\Feature\Profile;
 
 use App\Models\Administrator;
+use App\Models\Profile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,58 @@ use Tests\TestCase;
 class ProfileTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * Test a guest can get a list of active profiles.
+     */
+    public function test_guest_can_get_list_of_active_profiles()
+    {
+        Administrator::factory()->create();
+        Profile::factory(10)->create();
+
+        $response = $this->getJson(route('api.profiles.index'));
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'administrator_id',
+                    'last_name',
+                    'first_name',
+                    'image',
+                    'created_at',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Test an administrator can get a list of active profiles and show status.
+     */
+    public function test_administrator_can_get_list_of_active_profiles_and_show_status()
+    {
+        $administrator = Administrator::factory()->create();
+        Profile::factory(10)->create();
+
+        $response = $this->actingAs($administrator)
+            ->getJson(route('api.profiles.index'));
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'administrator_id',
+                    'last_name',
+                    'first_name',
+                    'image',
+                    'status',
+                    'created_at',
+                ],
+            ],
+        ]);
+    }
 
     /**
      * Test a guest can not store a profile.
